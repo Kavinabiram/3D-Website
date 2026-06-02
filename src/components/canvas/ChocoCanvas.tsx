@@ -24,6 +24,7 @@ export const ChocoCanvas: React.FC = () => {
         camera={{ position: [0, 0, 5], fov: 45, near: 0.1, far: 100 }}
       >
         <color attach="background" args={['#1A0E0A']} />
+        <fog attach="fog" args={['#1A0E0A', 6, 20]} />
         
         {/* Dynamic DPR Scaling for performance */}
         <PerformanceMonitor

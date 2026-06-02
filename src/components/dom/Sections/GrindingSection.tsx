@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-export const FactorySection: React.FC = () => {
+export const GrindingSection: React.FC = () => {
   return (
     <section className="h-screen w-full flex items-center justify-start px-4 sm:px-8 md:px-24 relative z-10 pointer-events-none text-cream-200">
       <div className="max-w-md pointer-events-auto">
@@ -13,25 +13,34 @@ export const FactorySection: React.FC = () => {
           className="bg-cocoa-900/50 backdrop-blur-md border border-white/10 p-5 sm:p-8 rounded-3xl shadow-glass flex flex-col gap-4"
         >
           <span className="text-[10px] font-bold tracking-[0.3em] text-gold-500 uppercase">
-            Zone 02 — Digital Lab
+            Step 06 — Grinding
           </span>
           <h2 className="text-3xl md:text-4xl font-serif tracking-wider text-cream-100 uppercase">
-            The Future Factory
+            Stone Grinding
           </h2>
           <p className="text-xs md:text-sm font-light text-cream-200/70 leading-relaxed">
-            Our automated laboratory utilizes micro-gravity conveyor arrays and electromagnetic nozzles to dispense tempered liquid chocolate. Watch the dynamic Gerstner waves ripple as raw elements are purified and molded in high fidelity.
+            The roasted cocoa nibs are crushed between heavy granite stone wheels. The friction and heat melt the rich cocoa butter within, transforming dry solid bits into a glossy, thick, flowing chocolate liquor.
           </p>
           
           <div className="flex items-center gap-6 mt-2">
             <div>
-              <div className="text-xl font-serif font-bold text-gold-500">60°C</div>
-              <div className="text-[8px] uppercase tracking-widest text-cream-200/40">Tempering Temp</div>
+              <div className="text-xl font-serif font-bold text-gold-500">20 Microns</div>
+              <div className="text-[8px] uppercase tracking-widest text-cream-200/40">Target Fineness</div>
             </div>
             <div className="w-[1px] h-8 bg-white/10" />
             <div>
-              <div className="text-xl font-serif font-bold text-gold-500">100%</div>
-              <div className="text-[8px] uppercase tracking-widest text-cream-200/40">Automated Pipeline</div>
+              <div className="text-xl font-serif font-bold text-gold-500">48 Hours</div>
+              <div className="text-[8px] uppercase tracking-widest text-cream-200/40">Grind Duration</div>
             </div>
+          </div>
+
+          <div className="mt-2 pt-2 border-t border-white/5">
+            <span className="text-[9px] uppercase tracking-widest text-gold-500/60 font-semibold block">
+              Ambient Sound Design
+            </span>
+            <span className="text-[10px] italic text-cream-200/50 block">
+              Heavy granite grinding stones, rhythmic rumble, thick chocolate splashing.
+            </span>
           </div>
         </motion.div>
       </div>
@@ -39,4 +48,4 @@ export const FactorySection: React.FC = () => {
   );
 };
 
-export default FactorySection;
+export default GrindingSection;

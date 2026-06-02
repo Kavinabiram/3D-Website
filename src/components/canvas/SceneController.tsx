@@ -5,11 +5,16 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import * as THREE from 'three';
 import useStore from '../../store/useStore';
 
-import CosmosZone from './environments/CosmosZone';
-import FactoryZone from './environments/FactoryZone';
-import IngredientsZone from './environments/IngredientsZone';
-import GalleryZone from './environments/GalleryZone';
-import GiftZone from './environments/GiftZone';
+import FarmScene from './environments/FarmScene';
+import HarvestScene from './environments/HarvestScene';
+import FermentationScene from './environments/FermentationScene';
+import DryingScene from './environments/DryingScene';
+import RoastingScene from './environments/RoastingScene';
+import GrindingScene from './environments/GrindingScene';
+import TemperingScene from './environments/TemperingScene';
+import MoldingScene from './environments/MoldingScene';
+import CoolingScene from './environments/CoolingScene';
+import RevealScene from './environments/RevealScene';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,84 +23,164 @@ export const SceneController: React.FC = () => {
   const activeSection = useStore((state) => state.activeSection);
   const setActiveSection = useStore((state) => state.setActiveSection);
 
-  const targetCamPos = useRef(new THREE.Vector3(0, 0, 5));
+  const targetCamPos = useRef(new THREE.Vector3(0, 2, 8));
   const targetLookAt = useRef(new THREE.Vector3(0, 0, 0));
 
   useEffect(() => {
-    // Scroll triggers to synchronize camera offsets across 6 distinct phases
+    // Scroll triggers to synchronize camera paths across 10 distinct storytelling stages
     const scrollTrigger = ScrollTrigger.create({
       trigger: '#scroll-container',
       start: 'top top',
       end: 'bottom bottom',
-      scrub: 1.2,
+      scrub: 1.5,
       onUpdate: (self) => {
         const progress = self.progress;
 
-        // Phase 1: Zone 1 (Cosmos) to Zone 2 (Factory)
-        if (progress < 0.166) {
-          const t = progress / 0.166;
-          targetCamPos.current.set(
-            THREE.MathUtils.lerp(0, 3, t),
-            THREE.MathUtils.lerp(0, 4, t),
-            THREE.MathUtils.lerp(5, -8, t)
-          );
-          targetLookAt.current.set(0, THREE.MathUtils.lerp(0, 1, t), 0);
-          setActiveSection(0);
-        }
-        // Phase 2: Zone 2 (Factory) to Zone 3 (Ingredients)
-        else if (progress >= 0.166 && progress < 0.333) {
-          const t = (progress - 0.166) / 0.167;
-          targetCamPos.current.set(
-            THREE.MathUtils.lerp(3, 12, t),
-            THREE.MathUtils.lerp(4, -2, t),
-            THREE.MathUtils.lerp(-8, -15, t)
-          );
-          targetLookAt.current.set(THREE.MathUtils.lerp(0, 12, t), -2, -15);
-          setActiveSection(1);
-        }
-        // Phase 3: Zone 3 (Ingredients) to Zone 4 (Gallery)
-        else if (progress >= 0.333 && progress < 0.5) {
-          const t = (progress - 0.333) / 0.167;
-          targetCamPos.current.set(
-            THREE.MathUtils.lerp(12, 0, t),
-            THREE.MathUtils.lerp(-2, 2, t),
-            THREE.MathUtils.lerp(-15, -22, t)
-          );
-          targetLookAt.current.set(0, 2, -22);
-          setActiveSection(2);
-        }
-        // Phase 4: Zone 4 (Gallery) to Zone 5 (Gift Box)
-        else if (progress >= 0.5 && progress < 0.666) {
-          const t = (progress - 0.5) / 0.166;
-          targetCamPos.current.set(
-            THREE.MathUtils.lerp(0, 0, t),
-            THREE.MathUtils.lerp(2, 1.2, t),
-            THREE.MathUtils.lerp(-22, -30, t)
-          );
-          targetLookAt.current.set(0, 0.5, -30);
-          setActiveSection(3);
-        }
-        // Phase 5: Zone 5 Configurator Focus
-        else if (progress >= 0.666 && progress < 0.833) {
-          const t = (progress - 0.666) / 0.167;
+        // Phase 1: progress < 0.1 (Scene 1: Farm)
+        if (progress < 0.1) {
+          const t = progress / 0.1;
           targetCamPos.current.set(
             0,
-            THREE.MathUtils.lerp(1.2, 0.8, t),
-            THREE.MathUtils.lerp(-30, -29, t)
+            THREE.MathUtils.lerp(2, -8, t),
+            THREE.MathUtils.lerp(8, -10, t)
           );
-          targetLookAt.current.set(0, 0.4, -30);
+          targetLookAt.current.set(
+            0, 
+            THREE.MathUtils.lerp(0, -10, t), 
+            THREE.MathUtils.lerp(0, -10, t)
+          );
+          setActiveSection(0);
+        }
+        // Phase 2: progress >= 0.1 && progress < 0.2 (Scene 2: Harvest to Scene 3: Fermentation)
+        else if (progress >= 0.1 && progress < 0.2) {
+          const t = (progress - 0.1) / 0.1;
+          targetCamPos.current.set(
+            THREE.MathUtils.lerp(0, 15, t),
+            THREE.MathUtils.lerp(-8, -10, t),
+            THREE.MathUtils.lerp(-10, -20, t)
+          );
+          targetLookAt.current.set(
+            THREE.MathUtils.lerp(0, 15, t),
+            THREE.MathUtils.lerp(-10, -12, t),
+            THREE.MathUtils.lerp(-10, -20, t)
+          );
+          setActiveSection(1);
+        }
+        // Phase 3: progress >= 0.2 && progress < 0.3 (Scene 3: Fermentation to Scene 4: Drying)
+        else if (progress >= 0.2 && progress < 0.3) {
+          const t = (progress - 0.2) / 0.1;
+          targetCamPos.current.set(
+            THREE.MathUtils.lerp(15, 20, t),
+            THREE.MathUtils.lerp(-10, 4, t),
+            THREE.MathUtils.lerp(-20, -35, t)
+          );
+          targetLookAt.current.set(
+            THREE.MathUtils.lerp(15, 20, t),
+            THREE.MathUtils.lerp(-12, 2, t),
+            THREE.MathUtils.lerp(-20, -35, t)
+          );
+          setActiveSection(2);
+        }
+        // Phase 4: progress >= 0.3 && progress < 0.4 (Scene 4: Drying to Scene 5: Roasting)
+        else if (progress >= 0.3 && progress < 0.4) {
+          const t = (progress - 0.3) / 0.1;
+          targetCamPos.current.set(
+            THREE.MathUtils.lerp(20, 5, t),
+            THREE.MathUtils.lerp(4, 10, t),
+            THREE.MathUtils.lerp(-35, -50, t)
+          );
+          targetLookAt.current.set(
+            THREE.MathUtils.lerp(20, 5, t),
+            THREE.MathUtils.lerp(2, 8, t),
+            THREE.MathUtils.lerp(-35, -50, t)
+          );
+          setActiveSection(3);
+        }
+        // Phase 5: progress >= 0.4 && progress < 0.5 (Scene 5: Roasting to Scene 6: Grinding)
+        else if (progress >= 0.4 && progress < 0.5) {
+          const t = (progress - 0.4) / 0.1;
+          targetCamPos.current.set(
+            THREE.MathUtils.lerp(5, -15, t),
+            THREE.MathUtils.lerp(10, 2, t),
+            THREE.MathUtils.lerp(-50, -65, t)
+          );
+          targetLookAt.current.set(
+            THREE.MathUtils.lerp(5, -15, t),
+            THREE.MathUtils.lerp(8, 0, t),
+            THREE.MathUtils.lerp(-50, -65, t)
+          );
           setActiveSection(4);
         }
-        // Phase 6: Zone 6 (Contact View transition)
-        else {
-          const t = (progress - 0.833) / 0.167;
+        // Phase 6: progress >= 0.5 && progress < 0.6 (Scene 6: Grinding to Scene 7: Tempering)
+        else if (progress >= 0.5 && progress < 0.6) {
+          const t = (progress - 0.5) / 0.1;
           targetCamPos.current.set(
-            THREE.MathUtils.lerp(0, 0, t),
-            THREE.MathUtils.lerp(0.8, 6, t),
-            THREE.MathUtils.lerp(-29, -22, t)
+            THREE.MathUtils.lerp(-15, -10, t),
+            THREE.MathUtils.lerp(2, -13, t),
+            THREE.MathUtils.lerp(-65, -80, t)
           );
-          targetLookAt.current.set(0, 0, -30);
+          targetLookAt.current.set(
+            THREE.MathUtils.lerp(-15, -10, t),
+            THREE.MathUtils.lerp(0, -15, t),
+            THREE.MathUtils.lerp(-65, -80, t)
+          );
           setActiveSection(5);
+        }
+        // Phase 7: progress >= 0.6 && progress < 0.7 (Scene 7: Tempering to Scene 8: Molding)
+        else if (progress >= 0.6 && progress < 0.7) {
+          const t = (progress - 0.6) / 0.1;
+          targetCamPos.current.set(
+            THREE.MathUtils.lerp(-10, 10, t),
+            THREE.MathUtils.lerp(-13, -10, t),
+            THREE.MathUtils.lerp(-80, -95, t)
+          );
+          targetLookAt.current.set(
+            THREE.MathUtils.lerp(-10, 10, t),
+            THREE.MathUtils.lerp(-15, -12, t),
+            THREE.MathUtils.lerp(-80, -95, t)
+          );
+          setActiveSection(6);
+        }
+        // Phase 8: progress >= 0.7 && progress < 0.8 (Scene 8: Molding to Scene 9: Cooling)
+        else if (progress >= 0.7 && progress < 0.8) {
+          const t = (progress - 0.7) / 0.1;
+          targetCamPos.current.set(
+            THREE.MathUtils.lerp(10, 20, t),
+            THREE.MathUtils.lerp(-10, -3, t),
+            THREE.MathUtils.lerp(-95, -110, t)
+          );
+          targetLookAt.current.set(
+            THREE.MathUtils.lerp(10, 20, t),
+            THREE.MathUtils.lerp(-12, -5, t),
+            THREE.MathUtils.lerp(-95, -110, t)
+          );
+          setActiveSection(7);
+        }
+        // Phase 9: progress >= 0.8 && progress < 0.9 (Scene 9: Cooling to Scene 10: Reveal)
+        else if (progress >= 0.8 && progress < 0.9) {
+          const t = (progress - 0.8) / 0.1;
+          targetCamPos.current.set(
+            THREE.MathUtils.lerp(20, 0, t),
+            THREE.MathUtils.lerp(-3, 1.2, t),
+            THREE.MathUtils.lerp(-110, -127, t)
+          );
+          targetLookAt.current.set(
+            THREE.MathUtils.lerp(20, 0, t),
+            THREE.MathUtils.lerp(-5, 0.4, t),
+            THREE.MathUtils.lerp(-110, -130, t)
+          );
+          setActiveSection(8);
+        }
+        // Phase 10: progress >= 0.9 (Scene 10: Reveal Focus)
+        else {
+          const t = (progress - 0.9) / 0.1;
+          targetCamPos.current.set(
+            0,
+            1.2,
+            THREE.MathUtils.lerp(-127, -126, t)
+          );
+          targetLookAt.current.set(0, 0.4, -130);
+          setActiveSection(9);
         }
       },
     });
@@ -114,13 +199,23 @@ export const SceneController: React.FC = () => {
     camera.lookAt(currentLook);
   });
 
+  // Performance Optimization: Render active scene and its direct neighbors to ensure smooth fly-throughs without pop-in
+  const isVisible = (index: number) => {
+    return activeSection === index || activeSection === index - 1 || activeSection === index + 1;
+  };
+
   return (
     <>
-      <CosmosZone visible={activeSection === 0} />
-      <FactoryZone visible={activeSection === 1} />
-      <IngredientsZone visible={activeSection === 2} />
-      <GalleryZone visible={activeSection === 3} />
-      <GiftZone visible={activeSection === 4 || activeSection === 5} />
+      <FarmScene visible={isVisible(0)} />
+      <HarvestScene visible={isVisible(1)} />
+      <FermentationScene visible={isVisible(2)} />
+      <DryingScene visible={isVisible(3)} />
+      <RoastingScene visible={isVisible(4)} />
+      <GrindingScene visible={isVisible(5)} />
+      <TemperingScene visible={isVisible(6)} />
+      <MoldingScene visible={isVisible(7)} />
+      <CoolingScene visible={isVisible(8)} />
+      <RevealScene visible={isVisible(9)} />
     </>
   );
 };

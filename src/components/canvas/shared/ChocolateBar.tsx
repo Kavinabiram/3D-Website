@@ -1,12 +1,16 @@
-import React, { useRef } from 'react';
+import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import useStore from '../../../store/useStore';
+import { createGoldFoilGeometry } from './geometryHelpers';
 
 export const ChocolateBar: React.FC = () => {
   const meshRef = useRef<THREE.Group>(null);
   const activeSection = useStore((state) => state.activeSection);
   const config = useStore((state) => state.config);
+
+  // Pre-generate crumpled gold foil wrapper
+  const goldFoilGeom = useMemo(() => createGoldFoilGeometry(1.9, 2.76, 0.04), []);
 
   // Map baseType to high-end chocolate color hexes
   const chocolateColor = React.useMemo(() => {
@@ -61,11 +65,11 @@ export const ChocolateBar: React.FC = () => {
           <boxGeometry args={[tileSize, tileSize, 0.08]} />
           <meshPhysicalMaterial
             color={chocolateColor}
-            roughness={0.28}
-            metalness={0.06}
-            clearcoat={0.7}
-            clearcoatRoughness={0.15}
-            sheen={0.5}
+            roughness={0.2}
+            metalness={0.05}
+            clearcoat={0.9}
+            clearcoatRoughness={0.08}
+            sheen={0.65}
             sheenColor={new THREE.Color('#4A2015')}
           />
         </mesh>
@@ -80,11 +84,12 @@ export const ChocolateBar: React.FC = () => {
         <boxGeometry args={[cols * (tileSize + gap) + 0.1, rows * (tileSize + gap) + 0.1, 0.12]} />
         <meshPhysicalMaterial
           color={chocolateColor}
-          roughness={0.32}
-          metalness={0.05}
-          clearcoat={0.6}
-          clearcoatRoughness={0.2}
-          sheen={0.4}
+          roughness={0.22}
+          metalness={0.04}
+          clearcoat={0.8}
+          clearcoatRoughness={0.1}
+          sheen={0.55}
+          sheenColor={new THREE.Color('#4A2015')}
         />
       </mesh>
 
@@ -92,12 +97,14 @@ export const ChocolateBar: React.FC = () => {
       {tiles}
 
       {/* Luxury Gold Wrapper Core */}
-      <mesh position={[0, 0, -0.065]} receiveShadow>
-        <boxGeometry args={[cols * (tileSize + gap) + 0.15, rows * (tileSize + gap) + 0.15, 0.01]} />
-        <meshStandardMaterial
+      <mesh position={[0, 0, -0.06]} receiveShadow>
+        <primitive object={goldFoilGeom} />
+        <meshPhysicalMaterial
           color="#D6A85F"
-          roughness={0.15}
-          metalness={0.9}
+          roughness={0.08}
+          metalness={1.0}
+          clearcoat={1.0}
+          clearcoatRoughness={0.03}
         />
       </mesh>
     </group>
