@@ -1091,19 +1091,6 @@ Potential extensions for the experience include:
 
 ---
 
-# 📸 Screenshots
-
-Add project screenshots here:
-
-```markdown
-![ChocoVerse Hero](./screenshots/hero.png)
-
-![Chocolate Journey](./screenshots/journey.png)
-
-![Chocolate Configurator](./screenshots/configurator.png)
-```
-
----
 
 # 📄 License
 
