@@ -6,7 +6,11 @@ import * as THREE from 'three';
 import vertexShader from '../../../shaders/liquidWaves/vertex.glsl';
 import fragmentShader from '../../../shaders/liquidWaves/fragment.glsl';
 
-export const LiquidChocolate: React.FC = () => {
+type LiquidChocolateProps = JSX.IntrinsicElements['mesh'] & {
+  planeArgs?: [number, number, number, number];
+};
+
+export const LiquidChocolate: React.FC<LiquidChocolateProps> = ({ planeArgs = [30, 20, 64, 64], ...props }) => {
   const materialRef = useRef<THREE.ShaderMaterial>(null);
 
   const uniforms = useMemo(
@@ -26,8 +30,8 @@ export const LiquidChocolate: React.FC = () => {
   });
 
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -2, -8]} receiveShadow>
-      <planeGeometry args={[30, 20, 64, 64]} />
+    <mesh receiveShadow {...props}>
+      <planeGeometry args={planeArgs} />
       <shaderMaterial
         ref={materialRef}
         vertexShader={vertexShader}

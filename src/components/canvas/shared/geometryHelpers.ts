@@ -23,8 +23,12 @@ export const createCocoaPodGeometry = (): THREE.BufferGeometry => {
     // Add 10 prominent vertical ridges
     const ridgePattern = 1.0 + Math.sin(theta * 10.0) * 0.08 * (1.0 - Math.abs(y) * 0.6);
     
-    x *= taper * ridgePattern;
-    z *= taper * ridgePattern;
+    // Organic bumpy noise
+    const organicNoise = Math.sin(x * 15.0) * Math.cos(y * 15.0 + z * 10.0) * 0.015 + 
+                         Math.sin(theta * 20.0 + y * 5.0) * 0.01;
+    
+    x *= taper * ridgePattern + organicNoise;
+    z *= taper * ridgePattern + organicNoise;
     
     pos.setXYZ(i, x, y, z);
   }

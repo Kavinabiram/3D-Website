@@ -8,7 +8,6 @@ import fragmentShader from '../../../shaders/goldEnergy/fragment.glsl';
 
 export const GoldTrails: React.FC = () => {
   const meshRef = useRef<THREE.Group>(null);
-  const materialRef = useRef<THREE.ShaderMaterial>(null);
 
   const uniforms = useMemo(
     () => ({
@@ -19,11 +18,20 @@ export const GoldTrails: React.FC = () => {
     []
   );
 
+  const material = useMemo(() => {
+    return new THREE.ShaderMaterial({
+      vertexShader,
+      fragmentShader,
+      uniforms,
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+  }, [uniforms]);
+
   useFrame((state) => {
     const elapsed = state.clock.getElapsedTime();
-    if (materialRef.current) {
-      materialRef.current.uniforms.uTime.value = elapsed;
-    }
+    material.uniforms.uTime.value = elapsed;
     if (meshRef.current) {
       // Gentle group rotation
       meshRef.current.rotation.y = elapsed * 0.1;
@@ -38,17 +46,9 @@ export const GoldTrails: React.FC = () => {
           key={i}
           rotation={[0, (i * Math.PI) / 1.5, Math.PI / 4]}
           position={[0, 0, 0]}
+          material={material}
         >
           <torusGeometry args={[3.5, 0.04, 8, 64]} />
-          <shaderMaterial
-            ref={materialRef}
-            vertexShader={vertexShader}
-            fragmentShader={fragmentShader}
-            uniforms={uniforms}
-            transparent
-            blending={THREE.AdditiveBlending}
-            depthWrite={false}
-          />
         </mesh>
       ))}
     </group>

@@ -27,13 +27,20 @@ export const SceneController: React.FC = () => {
   const targetLookAt = useRef(new THREE.Vector3(0, 0, 0));
 
   useEffect(() => {
-    // Scroll triggers to synchronize camera paths across 10 distinct storytelling stages
-    const scrollTrigger = ScrollTrigger.create({
-      trigger: '#scroll-container',
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: 1.5,
-      onUpdate: (self) => {
+    let scrollTrigger: ScrollTrigger;
+
+    const initScrollTrigger = () => {
+      if (!document.getElementById('scroll-container')) {
+        setTimeout(initScrollTrigger, 100);
+        return;
+      }
+
+      scrollTrigger = ScrollTrigger.create({
+        trigger: '#scroll-container',
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 1.5,
+        onUpdate: (self) => {
         const progress = self.progress;
 
         // Phase 1: progress < 0.1 (Scene 1: Farm)
@@ -182,11 +189,14 @@ export const SceneController: React.FC = () => {
           targetLookAt.current.set(0, 0.4, -130);
           setActiveSection(9);
         }
-      },
+      }
     });
+  };
+
+  initScrollTrigger();
 
     return () => {
-      scrollTrigger.kill();
+      if (scrollTrigger) scrollTrigger.kill();
     };
   }, [camera, setActiveSection]);
 

@@ -1,6 +1,7 @@
 import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import LiquidChocolate from '../shared/LiquidChocolate';
 
 interface SceneProps {
   visible: boolean;
@@ -8,7 +9,6 @@ interface SceneProps {
 
 export const TemperingScene: React.FC<SceneProps> = ({ visible }) => {
   const vortexRef = useRef<THREE.Group>(null);
-  const liquidPoolRef = useRef<THREE.Mesh>(null);
 
   // Generate deterministic ingredient paths
   const ingredients = useMemo(() => {
@@ -49,11 +49,6 @@ export const TemperingScene: React.FC<SceneProps> = ({ visible }) => {
         child.rotation.y = elapsed * 1.5 + idx;
         child.rotation.x = elapsed * 0.5;
       });
-    }
-
-    // 2. Animate Chocolate Pool Waves
-    if (liquidPoolRef.current) {
-      liquidPoolRef.current.rotation.z = elapsed * 0.04;
     }
   });
 
@@ -127,23 +122,11 @@ export const TemperingScene: React.FC<SceneProps> = ({ visible }) => {
       </group>
 
       {/* Glossy Tempered Chocolate Pool below */}
-      <mesh
-        ref={liquidPoolRef}
+      <LiquidChocolate 
         rotation={[-Math.PI / 2, 0, 0]}
         position={[0, -2.4, 0]}
-        receiveShadow
-      >
-        <planeGeometry args={[12, 12, 16, 16]} />
-        <meshPhysicalMaterial
-          color="#3D1C12"
-          roughness={0.1}
-          metalness={0.05}
-          clearcoat={1.0}
-          clearcoatRoughness={0.05}
-          sheen={1.0}
-          sheenColor={new THREE.Color('#4A2015')}
-        />
-      </mesh>
+        planeArgs={[12, 12, 64, 64]}
+      />
     </group>
   );
 };

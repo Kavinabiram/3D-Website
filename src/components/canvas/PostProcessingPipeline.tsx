@@ -4,6 +4,7 @@ import useStore from '../../store/useStore';
 
 export const PostProcessingPipeline: React.FC = () => {
   const dpr = useStore((state) => state.dpr);
+  const activeSection = useStore((state) => state.activeSection);
 
   // Disable heavy postprocessing on low performance settings
   if (dpr <= 1.0) {
@@ -13,9 +14,9 @@ export const PostProcessingPipeline: React.FC = () => {
   return (
     <EffectComposer>
       <DepthOfField
-        focusDistance={0.012}
-        focalLength={0.02}
-        bokehScale={2}
+        focusDistance={activeSection === 9 ? 0.005 : 0.012}
+        focalLength={activeSection === 9 ? 0.01 : 0.02}
+        bokehScale={activeSection === 9 ? 3 : 2}
         height={480}
       />
       <Bloom

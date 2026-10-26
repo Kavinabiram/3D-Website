@@ -11,6 +11,7 @@ export const RoastingScene: React.FC<SceneProps> = ({ visible }) => {
   const smokeRef = useRef<THREE.Points>(null);
   const sparksRef = useRef<THREE.Points>(null);
   const fireLightRef = useRef<THREE.PointLight>(null);
+  const coalsMaterialRef = useRef<THREE.MeshStandardMaterial>(null);
 
   // Generate smoke particles
   const smokeCount = 30;
@@ -55,9 +56,12 @@ export const RoastingScene: React.FC<SceneProps> = ({ visible }) => {
       drumRef.current.rotation.z = -elapsed * 1.0; // Rotate on its axis
     }
 
-    // 2. Fire Light Flicker
+    // 2. Fire Light Flicker and Coals Glow
     if (fireLightRef.current) {
       fireLightRef.current.intensity = 3.0 + Math.sin(elapsed * 15.0) * 0.8;
+    }
+    if (coalsMaterialRef.current) {
+      coalsMaterialRef.current.emissiveIntensity = 2.0 + Math.sin(elapsed * 8.0) * 1.5;
     }
 
     // 3. Smoke simulation
@@ -151,7 +155,13 @@ export const RoastingScene: React.FC<SceneProps> = ({ visible }) => {
       {/* Coals/Glow Bed underneath */}
       <mesh position={[0, -1.6, 0]} receiveShadow>
         <boxGeometry args={[2.0, 0.3, 1.6]} />
-        <meshStandardMaterial color="#2D140F" roughness={0.9} />
+        <meshStandardMaterial 
+          ref={coalsMaterialRef} 
+          color="#1A0E0A" 
+          emissive="#F7B955" 
+          emissiveIntensity={2.0} 
+          roughness={0.9} 
+        />
       </mesh>
 
       {/* Rising Smoke points */}

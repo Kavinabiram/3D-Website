@@ -17,7 +17,6 @@ export const Loader: React.FC<LoaderProps> = ({ onEnter }) => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
-          setIsLoaded(true);
           return 100;
         }
         return prev + Math.floor(Math.random() * 8) + 4;
@@ -25,7 +24,13 @@ export const Loader: React.FC<LoaderProps> = ({ onEnter }) => {
     }, 100);
 
     return () => clearInterval(interval);
-  }, [setIsLoaded]);
+  }, []);
+
+  useEffect(() => {
+    if (progress >= 100) {
+      setIsLoaded(true);
+    }
+  }, [progress, setIsLoaded]);
 
   return (
     <AnimatePresence>

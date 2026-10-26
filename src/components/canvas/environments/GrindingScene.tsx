@@ -1,6 +1,9 @@
-import React, { useRef } from 'react';
+import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+
+import vertexShader from '../../../shaders/meltingChocolate/vertex.glsl';
+import fragmentShader from '../../../shaders/meltingChocolate/fragment.glsl';
 
 interface SceneProps {
   visible: boolean;
@@ -10,6 +13,17 @@ export const GrindingScene: React.FC<SceneProps> = ({ visible }) => {
   const wheelLeftRef = useRef<THREE.Mesh>(null);
   const wheelRightRef = useRef<THREE.Mesh>(null);
   const liquidRef = useRef<THREE.Mesh>(null);
+  const materialRef = useRef<THREE.ShaderMaterial>(null);
+
+  const uniforms = useMemo(
+    () => ({
+      uTime: { value: 0 },
+      uMeltingProgress: { value: 1.0 }, // Fully liquid stream
+      uChocolateColor: { value: new THREE.Color('#3D1C12') },
+      uGoldColor: { value: new THREE.Color('#D6A85F') },
+    }),
+    []
+  );
 
   useFrame((state) => {
     if (!visible) return;
@@ -27,6 +41,10 @@ export const GrindingScene: React.FC<SceneProps> = ({ visible }) => {
     if (liquidRef.current) {
       liquidRef.current.position.y = -1.2 + Math.sin(elapsed * 2.0) * 0.05;
       liquidRef.current.scale.x = 1.0 + Math.sin(elapsed * 4.0) * 0.04;
+    }
+    
+    if (materialRef.current) {
+      materialRef.current.uniforms.uTime.value = elapsed;
     }
   });
 
@@ -68,14 +86,13 @@ export const GrindingScene: React.FC<SceneProps> = ({ visible }) => {
         <meshPhysicalMaterial color="#D6A85F" roughness={0.15} metalness={1.0} clearcoat={1.0} />
       </mesh>
 
-      {/* Viscous chocolate flowing stream oozing from center bottom */}
       <mesh ref={liquidRef} position={[0, -1.2, 0.8]} castShadow>
         <cylinderGeometry args={[0.2, 0.35, 1.4, 16]} />
-        <meshPhysicalMaterial
-          color="#3D1C12" // Melted chocolate color
-          roughness={0.12}
-          clearcoat={1.0}
-          clearcoatRoughness={0.08}
+        <shaderMaterial
+          ref={materialRef}
+          vertexShader={vertexShader}
+          fragmentShader={fragmentShader}
+          uniforms={uniforms}
         />
       </mesh>
     </group>

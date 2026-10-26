@@ -1,6 +1,7 @@
 import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import { RoundedBox } from '@react-three/drei';
 import useStore from '../../../store/useStore';
 import { createGoldFoilGeometry } from './geometryHelpers';
 
@@ -60,18 +61,19 @@ export const ChocolateBar: React.FC = () => {
       const x = startX + c * (tileSize + gap);
       const y = startY + r * (tileSize + gap);
       tiles.push(
-        <mesh key={`${r}-${c}`} position={[x, y, 0.06]} castShadow receiveShadow>
+      <mesh key={`${r}-${c}`} position={[x, y, 0.06]} castShadow receiveShadow>
           {/* Beveled chocolate square */}
-          <boxGeometry args={[tileSize, tileSize, 0.08]} />
-          <meshPhysicalMaterial
-            color={chocolateColor}
-            roughness={0.2}
-            metalness={0.05}
-            clearcoat={0.9}
-            clearcoatRoughness={0.08}
-            sheen={0.65}
-            sheenColor={new THREE.Color('#4A2015')}
-          />
+          <RoundedBox args={[tileSize, tileSize, 0.08]} radius={0.05} smoothness={4}>
+            <meshPhysicalMaterial
+              color={chocolateColor}
+              roughness={0.2}
+              metalness={0.05}
+              clearcoat={0.9}
+              clearcoatRoughness={0.08}
+              sheen={0.65}
+              sheenColor={new THREE.Color('#4A2015')}
+            />
+          </RoundedBox>
         </mesh>
       );
     }
@@ -81,16 +83,17 @@ export const ChocolateBar: React.FC = () => {
     <group ref={meshRef}>
       {/* Chocolate Base Board */}
       <mesh castShadow receiveShadow>
-        <boxGeometry args={[cols * (tileSize + gap) + 0.1, rows * (tileSize + gap) + 0.1, 0.12]} />
-        <meshPhysicalMaterial
-          color={chocolateColor}
-          roughness={0.22}
-          metalness={0.04}
-          clearcoat={0.8}
-          clearcoatRoughness={0.1}
-          sheen={0.55}
-          sheenColor={new THREE.Color('#4A2015')}
-        />
+        <RoundedBox args={[cols * (tileSize + gap) + 0.1, rows * (tileSize + gap) + 0.1, 0.12]} radius={0.05} smoothness={4}>
+          <meshPhysicalMaterial
+            color={chocolateColor}
+            roughness={0.22}
+            metalness={0.04}
+            clearcoat={0.8}
+            clearcoatRoughness={0.1}
+            sheen={0.55}
+            sheenColor={new THREE.Color('#4A2015')}
+          />
+        </RoundedBox>
       </mesh>
 
       {/* Grid of squares */}
